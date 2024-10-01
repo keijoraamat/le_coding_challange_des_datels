@@ -1,0 +1,15 @@
+version: 2
+updates:
+  - package-ecosystem: "gradle" # See documentation for possible values
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "npm" # See documentation for possible values
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+
+  - package-ecosystem: "github-actions"
+    schedule:
+      interval: "weekly"
