@@ -1,0 +1,44 @@
+plugins {
+    id 'org.springframework.boot' version '3.1.4' // Adjust version as needed
+    id 'io.spring.dependency-management' version '1.1.3'
+    id 'java'
+}
+
+group = 'org.example.mvc'
+version = '1.0.0'
+sourceCompatibility = '17' // Adjust Java version as needed
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // Spring Boot DevTools (optional)
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Spring Boot Test for unit and integration tests
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // Mocking framework for unit tests
+    testImplementation 'org.mockito:mockito-core:5.0.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.0.0'
+}
+
+test {
+    testLogging {
+        // Show results of passed, skipped, and failed tests in the console
+        events "passed", "skipped", "failed"
+
+        // Show the standard output and error of the test
+        showStandardStreams = true
+
+        // Display stack traces for failed tests
+        exceptionFormat "full"
+    }
+}
