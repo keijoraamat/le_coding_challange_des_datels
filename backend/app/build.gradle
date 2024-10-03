@@ -42,4 +42,13 @@ test {
         exceptionFormat "full"
     }
 }
+
+jar {
+    manifest {
+        archiveClassifier.set('')
+        attributes(
+                'Main-Class': 'org.example.mvc.Application'
+        )
+    }
+}
  
