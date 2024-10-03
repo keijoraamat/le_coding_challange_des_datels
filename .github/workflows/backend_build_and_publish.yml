@@ -36,7 +36,6 @@ jobs:
           # Read the build.gradle file
           java_version=$(grep -oP "sourceCompatibility\s*=\s*'(\d+)'" build.gradle | cut -d"'" -f2)
           echo "APP_JAVA_VERSION=$java_version" >> $GITHUB_ENV
-          printenv
       
       - name: Read app version from build.gradle
         run: |
