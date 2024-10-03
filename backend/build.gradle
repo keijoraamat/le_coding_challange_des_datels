@@ -27,19 +27,20 @@ dependencies {
 
     // Mocking framework for unit tests
     testImplementation 'org.mockito:mockito-core:5.0.0'
-    testImplementation 'org.mockito:mockito-junit-jupiter:5.0.0'
+
+    // Use JUnit Jupiter for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
 }
 
-test {
+
+
+tasks.named('test', Test) {
+    useJUnitPlatform()
+
+    maxHeapSize = '1G'
+
     testLogging {
-        // Show results of passed, skipped, and failed tests in the console
-        events "passed", "skipped", "failed"
-
-        // Show the standard output and error of the test
-        showStandardStreams = true
-
-        // Display stack traces for failed tests
-        exceptionFormat "full"
+        events "started", "passed", "skipped", "failed"
     }
 }
 
@@ -60,6 +61,12 @@ sourceSets {
     main {
         java {
             srcDirs = ['app/src/main/java']
+        }
+    }
+
+    test {
+        java {
+            srcDirs = ['app/src/test/java']
         }
     }
 }
