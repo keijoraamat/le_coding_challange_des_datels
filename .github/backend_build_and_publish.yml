@@ -1,0 +1,57 @@
+name: Build and Publish Backend Image
+
+on:
+  push:
+    branches:
+      - master
+  pull_request_target:
+    branches:
+      - master
+    types:
+      - opened
+
+jobs:
+  build:
+    runs-on: ubuntu:22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set working directory
+        run: cd backend
+
+      - name: Read Java version from build.gradle
+        run: |
+          # Read the build.gradle file
+          java_version=$(grep -oP "sourceCompatibility\s*=\s*'(\d+)'" build.gradle | cut -d"'" -f2)
+          echo "APP_JAVA_VERSION=$java_version" >> $GITHUB_ENV
+      
+      - name: Read app version from build.gradle
+        run: |
+          # Read the build.gradle file
+          app_version=$(grep -oP "version\s*=\s*'(\d+\.\d+\.\d+)'" build.gradle | cut -d"'" -f2)
+          echo "APP_VERSION=$app_version" >> $GITHUB_ENV
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'openjdk'
+          java-version: ${{ env.APP_JAVA_VERSION }}
+          cache: gradle
+
+      - name: Test Gradle package
+        run: ./gradlew test
+
+      - name: Build Gradle package
+        run: ./gradlew build
+
+      - name: Build Docker image
+        run: |
+          docker build -t docker.pkg.github.com/${{ github.repository }}/backend:${{ env.APP_VERSION }} .
+
+      - name: Log in to GitHub Packages
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+
+      - name: Push Docker image to GitHub Packages
+        run: docker push docker.pkg.github.com/${{ github.repository }}/backend:${{ env.APP_VERSION }}
