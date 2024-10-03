@@ -7,13 +7,9 @@ RUN addgroup -S spring && adduser -S spring -G spring
 
 WORKDIR /app
 
-COPY app/build/libs/*.jar app.jar
+COPY build/libs/*.jar app.jar
 
-# Change ownership of the application files to the non-root user
-RUN chown -R spring:spring /app
-
-# Switch to the non-root user
-USER spring
+USER spring:spring
 
 EXPOSE 8080
 

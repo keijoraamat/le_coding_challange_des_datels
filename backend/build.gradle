@@ -51,4 +51,15 @@ jar {
         )
     }
 }
- 
+
+springBoot {
+    mainClass = 'org.example.mvc.Application'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['app/src/main/java']
+        }
+    }
+}
