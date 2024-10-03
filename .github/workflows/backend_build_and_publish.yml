@@ -13,13 +13,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: backend
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Set working directory
-        run: cd backend
 
       - name: Read Java version from build.gradle
         run: |
