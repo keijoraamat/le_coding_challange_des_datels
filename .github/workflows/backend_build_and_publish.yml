@@ -24,13 +24,13 @@ jobs:
       - name: Read Java version from build.gradle
         run: |
           # Read the build.gradle file
-          java_version=$(grep -oP "sourceCompatibility\s*=\s*'(\d+)'" build.gradle | cut -d"'" -f2)
+          java_version=$(grep -oP "sourceCompatibility\s*=\s*'(\d+)'" app/build.gradle | cut -d"'" -f2)
           echo "APP_JAVA_VERSION=$java_version" >> $GITHUB_ENV
       
       - name: Read app version from build.gradle
         run: |
           # Read the build.gradle file
-          app_version=$(grep -oP "version\s*=\s*'(\d+\.\d+\.\d+)'" build.gradle | cut -d"'" -f2)
+          app_version=$(grep -oP "version\s*=\s*'(\d+\.\d+\.\d+)'" app/build.gradle | cut -d"'" -f2)
           echo "APP_VERSION=$app_version" >> $GITHUB_ENV
 
       - name: Set up JDK
