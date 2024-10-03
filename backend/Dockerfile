@@ -1,5 +1,7 @@
 FROM openjdk:17-jdk-alpine
 
+RUN apk upgrade --no-cache
+
 # Create a non-root user and group
 RUN addgroup -S spring && adduser -S spring -G spring
 
