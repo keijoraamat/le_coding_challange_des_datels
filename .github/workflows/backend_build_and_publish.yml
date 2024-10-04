@@ -62,7 +62,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ github.token }}
+          password: ${{ secrets.TEMPORARY_PLAYER_PAT }}
 
       - name: Build and push Docker image
         id: push
