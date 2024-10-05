@@ -34,7 +34,7 @@
     "lint": "npm run lint:js && npm run lint:css",
     "pretest": "npm run lint",
     "start": "vite",
-    "build": "yarn build",
+    "build": "vite build",
     "test": "yarn lint && yarn test:unit"
   },
   "type": "module"
