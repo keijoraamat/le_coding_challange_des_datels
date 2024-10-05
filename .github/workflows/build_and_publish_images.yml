@@ -130,7 +130,7 @@ jobs:
         with:
           context: ./${{ env.APP }}
           push: true
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:$frontend${{ env.APP_VERSION }}
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:frontend${{ env.APP_VERSION }}
 
 
       - name: Generate artifact attestation
