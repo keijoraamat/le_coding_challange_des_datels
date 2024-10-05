@@ -33,7 +33,7 @@ class UserControllerTest {
             )
         );
 
-        mockMvc.perform(get("/api/users"))
+        mockMvc.perform(get("/api/v2/users"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$[0].name").value("John Doe"))
@@ -48,7 +48,7 @@ class UserControllerTest {
             new User(1, "John Doe", "john@example.com")
         );
 
-        mockMvc.perform(get("/api/users/1"))
+        mockMvc.perform(get("/api/v2/users/1"))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.name").value("John Doe"));
@@ -60,7 +60,7 @@ class UserControllerTest {
     void getUserById_nonExistingUser_shouldReturn404() throws Exception {
         when(userService.getUserById(999)).thenReturn(null);
 
-        mockMvc.perform(get("/api/users/999"))
+        mockMvc.perform(get("/api/v2/users/999"))
             .andExpect(status().isNotFound());
 
         verify(userService, times(1)).getUserById(999);
