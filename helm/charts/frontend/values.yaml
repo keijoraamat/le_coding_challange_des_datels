@@ -54,7 +54,8 @@ securityContext:
   #   - ALL
   readOnlyRootFilesystem: true
   runAsNonRoot: true
-  runAsUser: 1000
+  # Runs as user 'nginx', which UID is 101
+  runAsUser: 101
 
 # This is for setting up a service more information can be found here: https://kubernetes.io/docs/concepts/services-networking/service/
 service:
