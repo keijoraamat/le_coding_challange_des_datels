@@ -100,13 +100,14 @@ jobs:
   
       - name: Update Helm Repo Index
         run: |
-          cr index --owner ${{ github.repository_owner }} --git-repo ${{ github.event.repository.name }} --package-path .cr-release-packages --index-path ./index.yaml
+          cr index --owner ${{ github.repository_owner }} --git-repo ${{ github.event.repository.name }} --package-path .cr-release-packages --index-path ../index.yaml
   
       - name: Commit and Push to gh-pages
         run: |
           git fetch origin gh-pages
           git checkout gh-pages || git checkout -b gh-pages
           cp -R .cr-release-packages/* ..
+
           rm -rf .cr-release-packages
           cd ..
           git add .
