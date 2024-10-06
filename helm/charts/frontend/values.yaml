@@ -52,7 +52,7 @@ securityContext:
   # capabilities:
   #   drop:
   #   - ALL
-  readOnlyRootFilesystem: true
+  # readOnlyRootFilesystem: true
   runAsNonRoot: true
   # Runs as user 'nginx', which UID is 101
   runAsUser: 101
