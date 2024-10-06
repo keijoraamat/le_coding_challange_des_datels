@@ -76,4 +76,5 @@ jobs:
       - name: Trigger Helm Charts Workflow
         uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0
         with:
+          token: ${{ secrets.TEMPORARY_PLAYER_PAT }}
           event-type: helm-changed

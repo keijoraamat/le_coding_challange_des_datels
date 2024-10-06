@@ -44,4 +44,5 @@ jobs:
         env:
           CR_TOKEN: "${{ secrets.TEMPORARY_PLAYER_PAT }}"
         with:
-          charts_dir: charts
+          charts_dir: helm/charts
+          skip_existing: true
