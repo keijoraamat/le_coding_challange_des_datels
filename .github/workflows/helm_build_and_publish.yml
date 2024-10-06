@@ -90,7 +90,7 @@ jobs:
 
       - name: Package Charts
         run: |
-          cr package helm/charts --package-path .cr-release-packages --since HEAD~1
+          cr package helm/charts --package-path .cr-release-packages
   
       - name: Upload Charts
         run: |
