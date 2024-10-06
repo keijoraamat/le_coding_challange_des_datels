@@ -95,4 +95,5 @@ jobs:
         with:
           charts_dir: helm/charts
           skip_existing: true
+          cr_extra_args: '--since HEAD~1'
 
