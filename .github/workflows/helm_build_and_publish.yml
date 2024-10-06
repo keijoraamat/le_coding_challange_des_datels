@@ -106,7 +106,9 @@ jobs:
         run: |
           git fetch origin gh-pages
           git checkout gh-pages || git checkout -b gh-pages
-          cp -R .cr-release-packages/* .
+          cp -R .cr-release-packages/* ..
+          rm -rf .cr-release-packages
+
           git add .
           git commit -m "Update Helm repository index and charts"
           git push origin gh-pages
