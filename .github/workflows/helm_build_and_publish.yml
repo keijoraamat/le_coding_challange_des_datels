@@ -108,6 +108,7 @@ jobs:
           git checkout gh-pages || git checkout -b gh-pages
           cp -f index.yaml .
           cp -R .cr-release-packages/* .
+          ls -la
           cp index.yaml .
           git add .
           git commit -m "Update Helm repository index and charts"
