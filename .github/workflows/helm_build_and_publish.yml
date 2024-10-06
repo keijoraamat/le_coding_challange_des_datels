@@ -9,9 +9,10 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   APP: helm
+  HELM_VERSION: v3.16.1
 
 jobs:
-  build-frontend:
+  build-helm-packages:
     name: Build and Publish Helm Packages
     runs-on: ubuntu-24.04
     defaults:
@@ -19,7 +20,7 @@ jobs:
         working-directory: ${{ env.APP }}
 
     permissions:
-      contents: read
+      contents: write
       packages: write
       attestations: write
       id-token: write
@@ -27,3 +28,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Configure Git
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+
+      - name: Install Helm
+        uses: azure/setup-helm@fe7b79cd5ee1e45176fcad797de68ecaf3ca4814
+        with:
+          version: ${{ env.HELM_VERSION }}
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@a917fd15b20e8b64b94d9158ad54cd6345335584
+        env:
+          CR_TOKEN: "${{ secrets.TEMPORARY_PLAYER_PAT }}"
+        with:
+          charts_dir: charts
