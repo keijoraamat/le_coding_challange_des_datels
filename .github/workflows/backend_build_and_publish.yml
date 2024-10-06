@@ -1,21 +1,8 @@
-name: Build and Publish Images
+name: Backend Workflow
 
 on:
-  push:
-    branches:
-      - master
-    paths:
-      - 'frontend/**'
-      - 'backend/**'
-  pull_request_target:
-    branches:
-      - master
-    types:
-      - opened
-      - synchronize
-    paths:
-      - 'frontend/**'
-      - 'backend/**'
+  repository_dispatch:
+    types: [backend-changed]
   workflow_dispatch:
 
 env:
