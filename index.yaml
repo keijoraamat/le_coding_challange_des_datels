@@ -3,6 +3,16 @@ entries:
   frontend:
   - apiVersion: v2
     appVersion: 1.16.0
+    created: "2024-10-06T19:04:02.321500453Z"
+    description: A Helm chart for Kubernetes
+    digest: 7ac15299dda95eb9dcdf87bd0db347bd62e701cd5613e914139e79c656d90e81
+    name: frontend
+    type: application
+    urls:
+    - https://github.com/keijoraamat/le_coding_challange_des_datels/releases/download/frontend-0.1.7/frontend-0.1.7.tgz
+    version: 0.1.7
+  - apiVersion: v2
+    appVersion: 1.16.0
     created: "2024-10-06T18:25:09.658511371Z"
     description: A Helm chart for Kubernetes
     digest: ea5cc9c9a92abb2539fe8d270aac16338613d4ea7abac7df73fa209bce88e437
@@ -51,4 +61,4 @@ entries:
     urls:
     - https://github.com/keijoraamat/le_coding_challange_des_datels/releases/download/frontend-0.1.2/frontend-0.1.2.tgz
     version: 0.1.2
-generated: "2024-10-06T18:25:09.658535826Z"
+generated: "2024-10-06T19:04:02.321528496Z"
