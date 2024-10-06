@@ -90,17 +90,17 @@ jobs:
 
       - name: Package Charts
         run: |
-          cr package helm/charts --package-path .cr-release-packages --charts-repo https://${{ github.repository_owner }}.github.io/${{ github.repository }} --since HEAD~1
+          cr package helm/charts --package-path .cr-release-packages --since HEAD~1
   
       - name: Upload Charts
         run: |
-          cr upload --owner ${{ github.repository_owner }} --git-repo ${{ github.event.repository.name }} --package-path .cr-release-packages
+          cr upload --owner ${{ github.repository_owner }} --git-repo ${{ github.event.repository.name }} --package-path .cr-release-packages --skip-existing
         env:
           CR_TOKEN: ${{ secrets.TEMPORARY_PLAYER_PAT }}
   
       - name: Update Helm Repo Index
         run: |
-          cr index --owner ${{ github.repository_owner }} --git-repo ${{ github.event.repository.name }} --charts-repo https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }} --package-path .cr-release-packages --index-path ./index.yaml
+          cr index --owner ${{ github.repository_owner }} --git-repo ${{ github.event.repository.name }} --package-path .cr-release-packages --index-path ./index.yaml
   
       - name: Commit and Push to gh-pages
         run: |
