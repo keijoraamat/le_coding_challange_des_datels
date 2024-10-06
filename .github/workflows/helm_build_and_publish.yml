@@ -110,7 +110,6 @@ jobs:
           cp index.yaml ..
           rm -rf .cr-release-packages
           cd ..
-          git pull
           git add .
           git commit -m "Update Helm repository index and charts"
           git push origin gh-pages
