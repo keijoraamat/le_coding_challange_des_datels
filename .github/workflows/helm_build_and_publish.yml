@@ -1,0 +1,29 @@
+name: Helm Workflow
+
+on:
+  repository_dispatch:
+    types: [helm-changed]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  APP: helm
+
+jobs:
+  build-frontend:
+    name: Build and Publish Helm Packages
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: ${{ env.APP }}
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4

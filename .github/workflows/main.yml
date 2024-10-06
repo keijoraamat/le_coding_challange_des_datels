@@ -1,0 +1,82 @@
+name: Main Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  RUNNER_VERSION: ubuntu-24.04
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  detect_changes:
+    runs-on: ubuntu-24.04
+    outputs:
+      backend_changed: ${{ steps.detect.outputs.backend_changed }}
+      frontend_changed: ${{ steps.detect.outputs.frontend_changed }}
+      helm_changed: ${{ steps.detect.outputs.helm_changed }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect Directory Changes
+        id: detect
+        run: |
+          echo "Detecting changes in directories..."
+
+          git fetch origin ${{ github.event.before }}
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.before }} ${{ github.event.after }})
+
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+
+          BACKEND_CHANGED=0
+          FRONTEND_CHANGED=0
+          HELM_CHANGED=0
+
+          for file in $CHANGED_FILES; do
+            if [[ $file == backend/* ]]; then
+              BACKEND_CHANGED=1
+            elif [[ $file == frontend/* ]]; then
+              FRONTEND_CHANGED=1
+            elif [[ $file == helm/* ]]; then
+              HELM_CHANGED=1
+            fi
+          done
+
+          echo "::set-output name=backend_changed::$BACKEND_CHANGED"
+          echo "::set-output name=frontend_changed::$FRONTEND_CHANGED"
+          echo "::set-output name=helm_changed::$HELM_CHANGED"
+
+  trigger_backend:
+    needs: detect_changes
+    if: needs.detect_changes.outputs.backend_changed == '1'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Trigger Backend Workflow
+        uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0
+        with:
+          event-type: backend-changed
+
+  trigger_frontend:
+    needs: detect_changes
+    if: needs.detect_changes.outputs.frontend_changed == '1'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Trigger Frontend Workflow
+        uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0
+        with:
+          event-type: frontend-changed
+
+  trigger_helm:
+    needs: detect_changes
+    if: needs.detect_changes.outputs.helm_changed == '1'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Trigger Helm Charts Workflow
+        uses: peter-evans/repository-dispatch@ff45666b9427631e3450c54a1bcbee4d9ff4d7c0
+        with:
+          event-type: helm-changed

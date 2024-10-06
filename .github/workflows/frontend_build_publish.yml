@@ -1,0 +1,63 @@
+name: Frontend Workflow
+
+on:
+  repository_dispatch:
+    types: [frontend-changed]
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  APP: frontend
+
+jobs:
+  build-frontend:
+    name: Build and Publish Frontend Image
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: ${{ env.APP }}
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ${{ env.APP }}/.nvmrc
+          cache: npm
+          cache-dependency-path: ${{ env.APP }}/yarn.lock
+
+      - name: Get version from package.json
+        run: |
+          echo "APP_VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_ENV
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@1f36f5b7a2d2f7bfd524795fc966e6d88c37baa9
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.TEMPORARY_PLAYER_PAT }}
+
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75
+        with:
+          context: ./${{ env.APP }}
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:${{ env.APP }}${{ env.APP_VERSION }}
+
+
+      - name: Generate artifact attestation
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
