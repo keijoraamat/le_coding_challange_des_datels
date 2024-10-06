@@ -96,7 +96,7 @@ jobs:
         run: |
           cr upload --owner ${{ github.repository_owner }} --git-repo ${{ github.event.repository.name }} --package-path .cr-release-packages
         env:
-          CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CR_TOKEN: ${{ secrets.TEMPORARY_PLAYER_PAT }}
   
       - name: Update Helm Repo Index
         run: |
