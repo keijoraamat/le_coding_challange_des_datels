@@ -1,7 +1,27 @@
-# A showcase repo of extraordinary Java app and infrastructure for it
+# Helm charts for the amazing Frontend and Backend
 
-This is a monorepo for frontend, backend, helm packages and CI/CD pipelines for building-testing application and deploying helm charts. For easy local development docker compose file is also provided. 
+This is a helm repo for amazing apps.
 
-## Repository overview
+## Usage
 
-The 
+[Helm](https://helm.sh) must be installed.
+
+Add this repo:
+
+```bash
+helm repo add coding_challange https://keijoraamat.github.io/le_coding_challange_des_datels/
+```
+
+Install app (in this example frontend is installed) with chart:
+
+```bash
+helm install frontend coding_challange/frontend
+```
+
+In case there is a need to remove the app:
+
+```bash
+helm uninstall frontend
+```
+
+In case this quick introduction to Helm was not enough head to Helm documentation - [https://helm.sh/docs/](https://helm.sh/docs/)
