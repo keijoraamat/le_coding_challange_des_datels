@@ -42,6 +42,51 @@ jobs:
       - name: Lint Charts
         run: |
           helm lint charts/*
+    
+      - name: Create Helm Tags
+        run: |
+          # Fetch all tags from the remote repository
+          git fetch --tags
+    
+          # Iterate over each chart directory in helm/charts/
+          for chart_dir in helm/charts/*/; do
+            if [ -d "$chart_dir" ]; then
+              # Get the chart name (directory name)
+              chart_name=$(basename "$chart_dir")
+              
+              # Path to the Chart.yaml file
+              chart_yaml="$chart_dir/Chart.yaml"
+              
+              # Check if Chart.yaml exists
+              if [ -f "$chart_yaml" ]; then
+                # Extract the version from Chart.yaml
+                version=$(grep '^version:' "$chart_yaml" | awk '{print $2}')
+                
+                # Construct the tag name
+                tag_name="helm-${chart_name}-${version}"
+                
+                # Check if the tag already exists
+                if git rev-parse "$tag_name" >/dev/null 2>&1; then
+                  echo "Tag $tag_name already exists for chart $chart_name."
+                else
+                  echo "Creating tag $tag_name for chart $chart_name version $version."
+                  
+                  # Configure git user
+                  git config user.name "${{ github.actor }}"
+                  git config user.email "${{ github.actor }}@users.noreply.github.com"
+                  
+                  # Create the annotated tag
+                  git tag -a "$tag_name" -m "Release $chart_name version $version"
+                  
+                  # Push the tag to the remote repository
+                  git push origin "$tag_name"
+                fi
+              else
+                echo "Chart.yaml not found in $chart_dir"
+              fi
+            fi
+          done
+        
 
       - name: Run chart-releaser
         uses: helm/chart-releaser-action@a917fd15b20e8b64b94d9158ad54cd6345335584
@@ -50,3 +95,4 @@ jobs:
         with:
           charts_dir: helm/charts
           skip_existing: true
+
