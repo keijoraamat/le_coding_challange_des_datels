@@ -106,6 +106,7 @@ jobs:
         run: |
           git fetch origin gh-pages
           git checkout gh-pages || git checkout -b gh-pages
+          cp -f index.yaml .
           cp -R .cr-release-packages/* .
           cp index.yaml .
           git add .
