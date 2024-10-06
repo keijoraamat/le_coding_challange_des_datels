@@ -10,6 +10,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
   APP: helm
   HELM_VERSION: v3.16.1
+  CHART_RELEASER_VERSION: 1.6.1
 
 jobs:
   build-helm-packages:
@@ -42,6 +43,10 @@ jobs:
       - name: Lint Charts
         run: |
           helm lint charts/*
+
+      - name: Install chart-releaser
+        run: |
+          curl -sSL https://github.com/helm/chart-releaser/releases/download/v${{ env.CHART_RELEASER_VERSION }}/chart-releaser_${{ env.CHART_RELEASER_VERSION }}_linux_amd64.tar.gz | tar xz -C /usr/local/bin cr
     
       - name: Create Helm Tags
         run: |
@@ -71,10 +76,6 @@ jobs:
                 else
                   echo "Creating tag $tag_name for chart $chart_name version $version."
                   
-                  # Configure git user
-                  git config user.name "${{ github.actor }}"
-                  git config user.email "${{ github.actor }}@users.noreply.github.com"
-                  
                   # Create the annotated tag
                   git tag -a "$tag_name" -m "Release $chart_name version $version"
                   
@@ -85,15 +86,28 @@ jobs:
                 echo "Chart.yaml not found in $chart_dir"
               fi
             fi
-          done
-        
+          done        
 
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@a917fd15b20e8b64b94d9158ad54cd6345335584
+      - name: Package Charts
+        run: |
+          cr package helm/charts --package-path .cr-release-packages --charts-repo https://${{ github.repository_owner }}.github.io/${{ github.repository }} --since HEAD~1
+  
+      - name: Upload Charts
+        run: |
+          cr upload --owner ${{ github.repository_owner }} --git-repo ${{ github.event.repository.name }} --package-path .cr-release-packages
         env:
-          CR_TOKEN: "${{ secrets.TEMPORARY_PLAYER_PAT }}"
-        with:
-          charts_dir: helm/charts
-          skip_existing: true
-          cr_extra_args: '--since HEAD~1'
-
+          CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
+      - name: Update Helm Repo Index
+        run: |
+          cr index --owner ${{ github.repository_owner }} --git-repo ${{ github.event.repository.name }} --charts-repo https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }} --package-path .cr-release-packages --index-path ./index.yaml
+  
+      - name: Commit and Push to gh-pages
+        run: |
+          git fetch origin gh-pages
+          git checkout gh-pages || git checkout -b gh-pages
+          cp -R .cr-release-packages/* .
+          cp index.yaml .
+          git add .
+          git commit -m "Update Helm repository index and charts"
+          git push origin gh-pages
