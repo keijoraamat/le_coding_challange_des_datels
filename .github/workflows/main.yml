@@ -6,10 +6,6 @@ on:
       - main
   workflow_dispatch:
 
-env:
-  RUNNER_VERSION: ubuntu-24.04
-  IMAGE_NAME: ${{ github.repository }}
-
 jobs:
   detect_changes:
     runs-on: ubuntu-24.04
@@ -48,9 +44,9 @@ jobs:
             fi
           done
 
-          echo "::set-output name=backend_changed::$BACKEND_CHANGED"
-          echo "::set-output name=frontend_changed::$FRONTEND_CHANGED"
-          echo "::set-output name=helm_changed::$HELM_CHANGED"
+          echo "backend_changed=$BACKEND_CHANGED" >> $GITHUB_OUTPUT
+          echo "frontend_changed=$FRONTEND_CHANGED" >> $GITHUB_OUTPUT
+          echo "helm_changed=$HELM_CHANGED" >> $GITHUB_OUTPUT
 
   trigger_backend:
     needs: detect_changes
