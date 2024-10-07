@@ -6,7 +6,7 @@ This is a monorepo for frontend, backend, helm packages and CI/CD pipelines for 
 
 The Java web application is released in dockerimages. Also Helm charts are provided to install and maintain the application in Kubernetes.
 
-## How to install the Application
+## Getting started
 
 Installing is simple as the app itself is simple. Not many moving parts.
 
@@ -16,6 +16,10 @@ Installing is simple as the app itself is simple. Not many moving parts.
 - Helm
 
 By default nginx ingress is enabled in the helm charts. If some other ingress controller is used please override the values - look at how to use custom values
+
+## Developing further
+
+Every components directory has its own specific readme to help getting starting.
 
 ---
 
@@ -40,6 +44,9 @@ helm install frontend coding_challange/frontend
 ### Overwrite default values
 
 There are 2 options. One is to write custom values into a yaml file. Second option is to use *--set* flag. 
+
+**NB!** The default values need no change if myapp.local is added to */etc/hosts* file to point to 127.0.0.1
+
 See more in Helm documentation: [https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing)
 
 ### Install nginx ingress controller
@@ -61,3 +68,9 @@ In case there is a need to remove the app:
 ```bash
 helm uninstall frontend
 ```
+
+## Contributing
+Feel free to submit issues or pull requests if you find any bugs or have suggestions for improvements.
+
+## License
+This project is licensed under the MIT License.
