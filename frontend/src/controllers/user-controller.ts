@@ -10,8 +10,8 @@ export class UserController {
 
   async getUsers(): Promise<User[]> {
     try {
-        console.log('Fetching users');
-      const response = await this.httpClient.fetch('http://localhost:8080/api/v2/users');
+      console.log('Fetching users');
+      const response = await this.httpClient.fetch('/api/v2/users');
       const data = await response.json();
       console.log('Users:', data);
       return data.map((user: any) => new User(user.id, user.name, user.email));
