@@ -9,7 +9,7 @@ import { UserController } from '../controllers/user-controller';
       <h2>User List</h2>
       <ul>
         <li repeat.for="user of users">
-          ${User.name}
+          ${user.name}
         </li>
       </ul>
     </template>
