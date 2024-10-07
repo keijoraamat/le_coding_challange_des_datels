@@ -3,7 +3,7 @@ FROM openjdk:17-jdk-alpine
 RUN apk upgrade --no-cache
 
 # Create a non-root user and group
-RUN addgroup -S spring && adduser -S spring -G spring
+RUN addgroup -S spring && adduser -u 102 -S spring -G spring
 
 WORKDIR /app
 

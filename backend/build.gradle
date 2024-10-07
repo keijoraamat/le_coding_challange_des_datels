@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'org.example.mvc'
-version = '1.0.0'
+version = '1.0.1'
 sourceCompatibility = '17' // Adjust Java version as needed
 
 repositories {
@@ -44,13 +44,8 @@ tasks.named('test', Test) {
     }
 }
 
-jar {
-    manifest {
-        archiveClassifier.set('')
-        attributes(
-                'Main-Class': 'org.example.mvc.Application'
-        )
-    }
+springBoot {
+    mainClass = 'org.example.mvc.Application'
 }
 
 springBoot {
