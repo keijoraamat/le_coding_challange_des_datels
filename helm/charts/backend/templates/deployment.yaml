@@ -37,10 +37,9 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            {{- range $.Values.service.ports }}
-            - containerPort: {{ . }}
+            - name: http
+              containerPort: {{ .Values.service.port }}
               protocol: TCP
-            {{- end }}
           envFrom:
             - configMapRef:
                 name: {{ include "backend.fullname" . }}
